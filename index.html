@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#173b35">
+<title>성희롱 예방교육 참여형 퀴즈</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#202b29;background:#f4f7f5}
+*{box-sizing:border-box}body{margin:0;padding:20px 14px 40px}
+main{max-width:620px;margin:auto}
+.hero{background:#173b35;color:white;border-radius:22px;padding:23px 20px;margin-bottom:16px}
+.eyebrow{font-size:12px;opacity:.8;letter-spacing:.04em}.hero h1{font-size:25px;line-height:1.3;margin:10px 0}.hero p{font-size:14px;line-height:1.65;color:#e0ebe6;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}.tag{font-size:12px;padding:6px 10px;border-radius:30px;background:#ffffff20}
+.card{background:white;border:1px solid #e1e9e4;border-radius:18px;padding:19px;margin-bottom:14px;box-shadow:0 4px 16px #173b3508}
+.center{text-align:center;padding:26px 18px}.emoji{font-size:44px;margin-bottom:12px}.muted{color:#718078;font-size:13px;line-height:1.65}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;border-radius:13px;padding:15px;background:#176b55;color:white;font-weight:750;font-size:16px;margin-top:12px}
+.primary:disabled{opacity:.4;cursor:not-allowed}.secondary{width:100%;border:1px solid #dce6df;border-radius:13px;padding:13px;background:white;font-weight:650;margin-top:10px}
+.hidden{display:none!important}.topline{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:12px}
+.pill{background:#edf4ef;color:#527064;border-radius:30px;padding:6px 10px;font-size:12px;font-weight:650}
+.track{height:8px;background:#e8eee9;border-radius:20px;overflow:hidden;margin-bottom:15px}.fill{height:100%;width:0;background:#24916f;transition:width .2s}
+.question{font-size:19px;font-weight:750;line-height:1.6;margin:17px 0}
+.options{display:grid;gap:9px}.choice{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:1px solid #dce6df;border-radius:13px;background:white;padding:14px;font-size:14px;line-height:1.5;color:#26352f}
+.choice.selected{border:2px solid #218367;background:#eff8f3;padding:13px}.choice:disabled{opacity:1}
+.letter{flex:none;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#edf3ef;color:#416454;font-weight:750;font-size:12px}
+.feedback{background:#f0f6f2;border:1px solid #dce9df;border-radius:14px;padding:15px;font-size:14px;line-height:1.7;margin-top:14px}
+.score{font-size:48px;font-weight:800;color:#176b55;margin:8px}
+footer{text-align:center;font-size:11px;color:#78867e;line-height:1.6;padding:8px}
+@media(min-width:560px){body{padding-top:34px}.hero{padding:28px}.hero h1{font-size:29px}.card{padding:23px}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+ <div class="eyebrow">직장 내 법정의무교육 · 참여형 아이스브레이킹</div>
+ <h1>이것도 성희롱일까?</h1>
+ <p>일상 속 직장생활 상황을 보고 여러분의 생각을 선택해 보세요!</p>
+ <div class="tags"><span class="tag">총 5문항</span><span class="tag">약 5~7분</span><span class="tag">정답 해설 제공</span><span class="tag">모바일 최적화</span></div>
+</header>
+
+<section id="intro" class="card center">
+ <div class="emoji">🙋</div><h2>퀴즈에 도전해 보세요!</h2>
+ <p class="muted">정답을 맞히는 것보다 상황을 올바르게 이해하는 것이 중요합니다.</p>
+ <div class="feedback" style="text-align:left"><b>참여 방법</b><br>① 문제를 읽습니다.<br>② 가장 적절하다고 생각하는 답을 선택합니다.<br>③ 정답과 해설을 확인합니다.<br>④ 마지막에 나의 점수를 확인합니다.</div>
+ <button class="primary" id="start">퀴즈 시작하기 →</button>
+</section>
+
+<section id="game" class="hidden">
+ <div class="topline"><span id="qnum">QUESTION 1 / 5</span><span class="pill" id="score">현재 점수 0점</span></div>
+ <div class="track"><div class="fill" id="progress"></div></div>
+ <div class="card">
+  <div class="topline"><span class="pill" id="kind">상황판단</span><span class="muted">하나의 답을 선택하세요</span></div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+  <button class="primary" id="check" disabled>답변 확인하기</button>
+  <button class="primary hidden" id="next">다음 문제 →</button>
+ </div>
+ <p class="muted" style="text-align:center">서로의 생각을 존중하며 참여해 주세요.</p>
+</section>
+
+<section id="result" class="card center hidden">
+ <div class="emoji">🎉</div><h2>퀴즈 완료!</h2><p class="muted">나의 퀴즈 결과</p>
+ <div class="feedback"><div class="score" id="finalScore">0점</div><div id="finalCount" class="muted">5문항 중 0문항 정답</div></div>
+ <p id="resultMessage"></p>
+ <div class="feedback" style="text-align:left"><b>오늘의 핵심 메시지</b><br>상대방의 입장에서 생각하고, 서로의 인격과 경계를 존중하는 것이 건강한 직장문화의 시작입니다.</div>
+ <button class="primary" id="restart">처음부터 다시 하기 ↻</button>
+</section>
+<footer>본 퀴즈는 교육용 상황판단 자료이며, 실제 성희롱 해당 여부는 구체적인 사실관계와 관련 법령에 따라 판단됩니다.</footer>
+</main>
+<script>
+const questions=[
+{kind:'상황판단',q:'직장 동료가 외모를 보며 “오늘 옷이 정말 섹시하네요. 몸매가 좋아서 잘 어울려요!”라고 반복해서 말합니다. 가장 적절한 판단은?',opts:['친근한 칭찬이므로 문제없다','상대방이 불쾌하다면 성희롱 문제가 될 수 있다','친한 동료끼리는 허용된다','한 번만 말했다면 무조건 괜찮다'],a:1,why:'성적인 외모 평가가 상대방에게 성적 굴욕감이나 혐오감을 주는 경우 성희롱에 해당할 수 있습니다. 말한 사람의 의도만으로 판단하지 않습니다.',tip:'말한 사람의 의도와 듣는 사람의 입장을 함께 생각해 보세요.'},
+{kind:'상황판단',q:'회식 자리에서 상사가 여성 직원에게 “여자는 술을 잘 따라야 분위기가 좋아진다”며 술을 따르도록 요구합니다. 가장 바람직한 대응은?',opts:['회식 분위기를 위해 요구에 따른다','상사의 지시이므로 무조건 따른다','성별에 따른 요구는 부적절하다는 점을 알리고 도움을 요청한다','다른 직원도 있으니 모른 척한다'],a:2,why:'성별 고정관념에 따라 특정 행동을 요구하는 것은 부적절합니다. 문제를 제기하고 조직 내 고충상담 창구 등을 활용할 수 있습니다.',tip:'직급이 높다는 이유로 부적절한 요구가 정당화되는지 생각해 보세요.'},
+{kind:'OX 퀴즈',q:'성희롱은 반드시 상대방에게 신체적인 접촉을 해야만 성립할 수 있다.',opts:['O · 그렇다','X · 아니다'],a:1,why:'신체 접촉이 없어도 성적인 언어, 메시지, 이미지 등으로 성적 굴욕감이나 혐오감을 주는 경우 성희롱이 성립할 수 있습니다.',tip:'성희롱은 말과 행동, 시각적 표현 등 다양한 방식으로 나타납니다.'},
+{kind:'상황판단',q:'직장 단체 채팅방에서 동료가 특정 직원의 외모를 성적으로 묘사한 사진과 농담을 공유했습니다. 가장 적절한 행동은?',opts:['재미있으니 웃으며 반응한다','다른 사람에게도 재미있게 전달한다','문제의 내용을 중단시키고 필요한 경우 신고·상담한다','단체방에서 발생한 일이므로 개인적으로 해결하게 둔다'],a:2,why:'온라인 공간에서도 직장 내 성희롱 문제가 발생할 수 있습니다. 부적절한 공유를 중단시키고 피해자 보호와 적절한 상담 및 신고 절차를 안내하는 것이 바람직합니다.',tip:'온라인 공간에서도 직장 내 행동의 책임이 존재한다는 점을 생각해 보세요.'},
+{kind:'OX 퀴즈',q:'상대방이 싫다는 의사를 표현하지 않았다면 성적인 농담이나 발언은 언제나 성희롱이 아니다.',opts:['O · 그렇다','X · 아니다'],a:1,why:'명시적인 거부가 없더라도 성적인 언동이 상대방에게 성적 굴욕감이나 혐오감을 주는 경우 성희롱에 해당할 수 있습니다. 침묵이 동의를 뜻하지는 않습니다.',tip:'상대방이 침묵하거나 웃었다는 사실이 동의와 같은 의미인지 생각해 보세요.'}
+];
+let index=0,points=0,selected=null,locked=false;
+const $=id=>document.getElementById(id);
+function show(id){['intro','game','result'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
+function render(){
+ const q=questions[index];selected=null;locked=false;
+ $('qnum').textContent=`QUESTION ${index+1} / 5`;$('score').textContent=`현재 점수 ${points*20}점`;
+ $('progress').style.width=`${index/5*100}%`;$('kind').textContent=q.kind;$('question').textContent=q.q;$('options').innerHTML='';
+ q.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='choice';const letter=document.createElement('span');letter.className='letter';letter.textContent=q.opts.length===2?['O','X'][i]:String.fromCharCode(65+i);const label=document.createElement('span');label.textContent=o;b.append(letter,label);b.addEventListener('click',()=>choose(i));$('options').append(b)});
+ $('feedback').classList.add('hidden');$('feedback').textContent='';$('check').classList.remove('hidden');$('check').disabled=true;$('next').classList.add('hidden');$('next').textContent=index===4?'결과 확인하기 →':'다음 문제 →';
+}
+function choose(i){if(locked)return;selected=i;$('check').disabled=false;[...$('options').children].forEach((b,n)=>b.classList.toggle('selected',n===i))}
+function check(){
+ if(selected===null||locked)return;locked=true;const q=questions[index],correct=selected===q.a;if(correct)points++;
+ [...$('options').children].forEach((b,i)=>{b.disabled=true;b.classList.remove('selected');if(i===q.a){b.style.border='2px solid #16a34a';b.style.background='#eff8f1'}else if(i===selected){b.style.border='2px solid #dc5555'}});
+ $('feedback').classList.remove('hidden');$('feedback').innerHTML=`<b>${correct?'🎉 정답입니다!':'💡 아쉽지만 다시 알아볼까요?'}</b><br>${q.why}<div style="border-top:1px solid #dce9df;margin-top:10px;padding-top:10px"><b>생각해 볼 점</b><br>${q.tip}</div>`;
+ $('check').classList.add('hidden');$('next').classList.remove('hidden');$('score').textContent=`현재 점수 ${points*20}점`;$('progress').style.width=`${(index+1)/5*100}%`;
+}
+function finish(){show('result');$('finalScore').textContent=`${points*20}점`;$('finalCount').textContent=`5문항 중 ${points}문항 정답`;$('resultMessage').textContent=points===5?'완벽합니다! 성희롱 예방에 대한 기본적인 상황판단을 잘 이해하고 있습니다.':points>=3?'잘하셨습니다! 오늘의 해설을 기억하고 일상 속에서 실천해 보세요.':'괜찮습니다! 성희롱 예방의 핵심은 서로의 입장을 이해하고 존중하는 것입니다. 이번 퀴즈의 해설을 꼭 확인해 보세요.'}
+$('start').addEventListener('click',()=>{index=0;points=0;show('game');render()});
+$('check').addEventListener('click',check);
+$('next').addEventListener('click',()=>{if(index===4){finish();return}index++;render()});
+$('restart').addEventListener('click',()=>{index=0;points=0;show('game');render()});
+</script>
+</body></html>
